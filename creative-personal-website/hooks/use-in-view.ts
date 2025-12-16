@@ -4,7 +4,13 @@ import { useEffect, useRef, useState } from "react"
 
 export function useInView(options?: IntersectionObserverInit) {
   const ref = useRef<HTMLDivElement>(null)
+  const optionsRef = useRef(options)
   const [isInView, setIsInView] = useState(false)
+
+  // Store latest options in ref to avoid dependency issues
+  useEffect(() => {
+    optionsRef.current = options
+  }, [options])
 
   useEffect(() => {
     if (!ref.current) return
@@ -15,7 +21,7 @@ export function useInView(options?: IntersectionObserverInit) {
       },
       {
         threshold: 0.1,
-        ...options,
+        ...optionsRef.current,
       },
     )
 
@@ -24,7 +30,10 @@ export function useInView(options?: IntersectionObserverInit) {
     return () => {
       observer.disconnect()
     }
-  }, [options])
+    // Intentionally exclude options from dependencies to prevent unnecessary observer recreation
+    // Options are accessed via ref to always use the latest values
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return { ref, isInView }
 }
