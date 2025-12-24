@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if(document.querySelector('.sliding-skills')) initSkillBar();
   initBinarySelector();
   initFlipCard();
+  initAboutBoxes();
 });
 
 /* --- Theme Toggle --- */
@@ -168,4 +169,35 @@ function initBinarySelector() {
   }
 
   updateProject();
+}
+
+/* --- About Boxes --- */
+function initAboutBoxes() {
+  const passionsContent = document.getElementById('passions-content');
+  const interestsContent = document.getElementById('interests-content');
+  const leadershipContent = document.getElementById('leadership-content');
+  const randomFactsContent = document.getElementById('random-facts-content');
+
+  // Populate Passions
+  if (passionsContent && PROFILE.about.passions && PROFILE.about.passions.length > 0) {
+    passionsContent.innerHTML = '<ul>' + PROFILE.about.passions.map(p => `<li>${p}</li>`).join('') + '</ul>';
+  }
+
+  // Populate Interests
+  if (interestsContent && PROFILE.about.interests && PROFILE.about.interests.length > 0) {
+    interestsContent.innerHTML = '<ul>' + PROFILE.about.interests.map(i => `<li>${i}</li>`).join('') + '</ul>';
+  }
+
+  // Populate Leadership
+  if (leadershipContent && PROFILE.about.leadership && PROFILE.about.leadership.length > 0) {
+    leadershipContent.innerHTML = '<ul>' + PROFILE.about.leadership.map(l => `<li>${l}</li>`).join('') + '</ul>';
+  } else if (leadershipContent && PROFILE.about.clubs && PROFILE.about.clubs.length > 0) {
+    // Fallback to clubs if leadership is empty
+    leadershipContent.innerHTML = '<ul>' + PROFILE.about.clubs.map(c => `<li>${c}</li>`).join('') + '</ul>';
+  }
+
+  // Populate Random Facts
+  if (randomFactsContent && PROFILE.about.randomFacts && PROFILE.about.randomFacts.length > 0) {
+    randomFactsContent.innerHTML = '<ul>' + PROFILE.about.randomFacts.map(f => `<li>${f}</li>`).join('') + '</ul>';
+  }
 }

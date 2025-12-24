@@ -6,9 +6,11 @@ const PROFILE = {
     taglines: ["Builder", "Creative", "Developer", "Visionary"],
     about: {
         intro: "I am a CS student at Georgia Tech with a minor in Math. I specialize in full-stack development, robotics, and AI/ML, aiming to build systems that bridge the gap between complex algorithms and human-centric design.",
-        passions: ["Robotics", "AI/ML", "Startups", "Full Stack"],
-        interests: ["Hiking", "Photography", "Sci-Fi Novels"],
-        clubs: ["Startup Exchange", "Big Data Big Impact", "Medical Robotics"]
+        passions: ["AI/ML", "Startups", "Content Creation"],
+        interests: ["Traveling", "Lifting", "Tennis", "Cooking & Eating"],
+        clubs: ["Startup Exchange", "Big Data Big Impact", "FreShGA"],
+        leadership: ["Advisor @ GT Startup Exchange", "Advisor @ GT Big Data Big Impact"],
+        randomFacts: ["2nd degree black belt in Taekwondo", "I love to cook", "I can play alto saxophone"]
     },
     skills: [
         "Python", "Java", "C++", "React", "Node.js", "PyTorch", "AWS", "OpenCV"
