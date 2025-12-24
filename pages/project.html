@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Details</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav>
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">ABHIJAY SALVI</a>
+            <ul class="nav-links">
+                <li><a href="../index.html#about">About</a></li>
+                <li><a href="../index.html#education">Education</a></li>
+                <li><a href="../index.html#experience">Experience</a></li>
+                <li><a href="../index.html#projects">Projects</a></li>
+                <li><a href="../assets/resume.pdf" class="btn" target="_blank">Resume</a></li>
+                <li id="theme-toggle" class="theme-toggle">🌙</li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container" style="padding-top: 4rem;">
+        <nav class="breadcrumb-nav">
+            <a href="../index.html"><i class="fas fa-home"></i> Home</a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="all-projects.html">All Projects</a>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-current" id="breadcrumb-project"></span>
+        </nav>
+        
+        <div style="max-width: 800px; margin: 0 auto; margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                <h1 id="p-title" style="font-size: 3rem; margin-bottom: 1rem; flex: 1;"></h1>
+                <a href="all-projects.html" class="btn btn-nav" style="margin-left: 2rem;">
+                    <i class="fas fa-arrow-left" style="margin-right: 0.5rem;"></i> Back
+                </a>
+            </div>
+            
+            <div style="background: var(--card-bg); height: 300px; display: flex; align-items: center; justify-content: center; border-radius: 10px; margin-bottom: 2rem; color: var(--text-secondary); border: 1px solid rgba(255, 255, 255, 0.05);">
+                Project Image Placeholder
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                <a id="p-link" href="#" target="_blank" class="btn">
+                    <i class="fas fa-external-link-alt" style="margin-right: 0.5rem;"></i> View on Devpost
+                </a>
+                <a href="#" class="btn" style="border-color: var(--text-secondary); color: var(--text-secondary);">
+                    <i class="fab fa-github" style="margin-right: 0.5rem;"></i> GitHub Repo
+                </a>
+            </div>
+
+            <h3 style="color: var(--accent-color);">Overview</h3>
+            <p id="p-desc" style="margin-bottom: 2rem; color: var(--text-secondary); line-height: 1.8;"></p>
+
+            <h3 style="color: var(--accent-color);">Tech Stack</h3>
+            <div id="p-tech" style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;"></div>
+            
+            <div class="nav-footer" style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid rgba(255, 255, 255, 0.05); display: flex; justify-content: space-between; align-items: center;">
+                <a href="all-projects.html" class="btn btn-nav">
+                    <i class="fas fa-arrow-left" style="margin-right: 0.5rem;"></i> All Projects
+                </a>
+                <div style="display: flex; gap: 1rem;">
+                    <a id="prev-project" href="#" class="btn btn-nav" style="display: none;">
+                        <i class="fas fa-chevron-left" style="margin-right: 0.5rem;"></i> Previous
+                    </a>
+                    <a id="next-project" href="#" class="btn btn-nav" style="display: none;">
+                        Next <i class="fas fa-chevron-right" style="margin-left: 0.5rem;"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../data.js"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+        const proj = PROJECTS.find(p => p.id === id);
+
+        if(proj) {
+            document.getElementById('p-title').innerText = proj.title;
+            document.getElementById('p-desc').innerText = proj.description;
+            document.getElementById('p-link').href = proj.link;
+            document.getElementById('breadcrumb-project').innerText = proj.title;
+            
+            const techContainer = document.getElementById('p-tech');
+            proj.tech.forEach(t => {
+                const tag = document.createElement('span');
+                tag.className = 'btn';
+                tag.style.cursor = 'default';
+                tag.innerText = t;
+                techContainer.appendChild(tag);
+            });
+            
+            // Add navigation to previous/next projects
+            const currentIndex = PROJECTS.findIndex(p => p.id === id);
+            const prevProject = PROJECTS[currentIndex - 1];
+            const nextProject = PROJECTS[currentIndex + 1];
+            
+            if (prevProject) {
+                const prevLink = document.getElementById('prev-project');
+                prevLink.href = `project.html?id=${prevProject.id}`;
+                prevLink.style.display = 'inline-block';
+            }
+            
+            if (nextProject) {
+                const nextLink = document.getElementById('next-project');
+                nextLink.href = `project.html?id=${nextProject.id}`;
+                nextLink.style.display = 'inline-block';
+            }
+        }
+    </script>
+</body>
+</html>

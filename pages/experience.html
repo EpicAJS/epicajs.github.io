@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experience Details</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav>
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">ABHIJAY SALVI</a>
+            <ul class="nav-links">
+                <li><a href="../index.html#about">About</a></li>
+                <li><a href="../index.html#education">Education</a></li>
+                <li><a href="../index.html#experience">Experience</a></li>
+                <li><a href="../index.html#projects">Projects</a></li>
+                <li><a href="../assets/resume.pdf" class="btn" target="_blank">Resume</a></li>
+                <li id="theme-toggle" class="theme-toggle">🌙</li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container" style="padding-top: 4rem;">
+        <nav class="breadcrumb-nav">
+            <a href="../index.html"><i class="fas fa-home"></i> Home</a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="../index.html#experience">Experience</a>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-current" id="breadcrumb-company"></span>
+        </nav>
+        
+        <div id="exp-content" style="max-width: 800px; margin: 0 auto; background: var(--card-bg); padding: 3rem; border-radius: 10px; margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem;">
+                <div style="flex: 1;">
+                    <span id="exp-dates" style="color: var(--accent-color); font-family: monospace;"></span>
+                    <h1 id="exp-title" style="font-size: 2.5rem; margin: 0.5rem 0;"></h1>
+                    <h3 id="exp-company" style="color: var(--text-secondary); margin-bottom: 2rem;"></h3>
+                </div>
+                <a href="../index.html#experience" class="btn btn-nav" style="margin-left: 2rem;">
+                    <i class="fas fa-arrow-left" style="margin-right: 0.5rem;"></i> Back
+                </a>
+            </div>
+            
+            <div id="exp-details" style="margin-bottom: 2rem;"></div>
+            
+            <h4>Technologies Used:</h4>
+            <div id="exp-tech" style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;"></div>
+            
+            <div class="nav-footer" style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid rgba(255, 255, 255, 0.05);">
+                <a href="../index.html#experience" class="btn btn-nav">
+                    <i class="fas fa-arrow-left" style="margin-right: 0.5rem;"></i> View All Experience
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script src="../data.js"></script>
+    <script>
+        // Parse URL Param
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+        const exp = EXPERIENCE.find(e => e.id === id);
+
+        if(exp) {
+            document.getElementById('exp-dates').innerText = exp.dates;
+            document.getElementById('exp-title').innerText = exp.title;
+            document.getElementById('exp-company').innerText = '@ ' + exp.company;
+            document.getElementById('breadcrumb-company').innerText = exp.company;
+            
+            const list = document.createElement('ul');
+            list.style.paddingLeft = '1.5rem';
+            exp.details.forEach(point => {
+                const li = document.createElement('li');
+                li.innerText = point;
+                li.style.marginBottom = '0.5rem';
+                list.appendChild(li);
+            });
+            document.getElementById('exp-details').appendChild(list);
+
+            const techContainer = document.getElementById('exp-tech');
+            exp.tech.forEach(t => {
+                const badge = document.createElement('span');
+                badge.className = 'btn'; // reuse btn style for tags
+                badge.style.cursor = 'default';
+                badge.innerText = t;
+                techContainer.appendChild(badge);
+            });
+        } else {
+            document.body.innerHTML = "<h1 style='text-align:center; padding-top:4rem;'>Experience not found.</h1>";
+        }
+    </script>
+</body>
+</html>
