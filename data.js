@@ -105,8 +105,8 @@ const PROJECTS = [
         link: "https://devpost.com/software/facecard-kcqdgo"
     },
     {
-        id: "rekindlar",
-        title: "RekindlAR",
+        id: "rekindlear",
+        title: "RekindleAR",
         blurb: "Augmented reality for memory preservation.",
         description: "Using AR to help users reconnect with past memories in an immersive 3D environment.",
         tech: ["SnapAR", "Unity", "Python"],
