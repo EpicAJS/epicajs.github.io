@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Projects</title>
+    <title>Projects | Abhijay Salvi</title>
+    <meta name="description" content="Explore Abhijay Salvi's projects in research, hackathons, robotics, ML/AI, computer vision, and more.">
     <link rel="icon" type="image/png" href="../assets/logo.png">
     <link rel="stylesheet" href="../styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -19,7 +20,7 @@
                 <li><a href="../index.html#about">About</a></li>
                 <li><a href="../index.html#education">Education</a></li>
                 <li><a href="../index.html#experience">Experience</a></li>
-                <li><a href="../index.html#projects">Projects</a></li>
+                <li><a href="all-projects.html" class="active">Projects</a></li>
                 <li><a href="../assets/resume.pdf" class="btn" target="_blank">Resume</a></li>
                 <li id="theme-toggle" class="theme-toggle">🌙</li>
             </ul>
@@ -27,40 +28,129 @@
     </nav>
 
     <main class="container" style="padding-top: 4rem;">
-        <nav class="breadcrumb-nav">
+        <nav class="breadcrumb-nav" aria-label="Breadcrumb">
             <a href="../index.html"><i class="fas fa-home"></i> Home</a>
             <span class="breadcrumb-separator">/</span>
-            <a href="../index.html#projects">Projects</a>
-            <span class="breadcrumb-separator">/</span>
-            <span class="breadcrumb-current">All Projects</span>
+            <span class="breadcrumb-current">Projects</span>
         </nav>
-        
+
         <h1 class="section-title" style="margin-top: 2rem;">All Projects</h1>
-        <div class="projects-grid" id="grid-container">
+        <p class="text-center text-sec mb-2" style="max-width: 600px; margin-left: auto; margin-right: auto;">Research, hackathons, robotics, ML/AI, and more. Filter and sort below.</p>
+
+        <div class="projects-controls">
+            <div class="projects-filters" role="group" aria-label="Filter by category">
+                <button type="button" class="filter-btn active" data-filter="all">All</button>
+                <button type="button" class="filter-btn" data-filter="Research">Research</button>
+                <button type="button" class="filter-btn" data-filter="Hackathons">Hackathons</button>
+                <button type="button" class="filter-btn" data-filter="Robotics">Robotics</button>
+                <button type="button" class="filter-btn" data-filter="ML/AI">ML/AI</button>
+                <button type="button" class="filter-btn" data-filter="Computer Vision">Computer Vision</button>
+                <button type="button" class="filter-btn" data-filter="AR/VR">AR/VR</button>
+                <button type="button" class="filter-btn" data-filter="Mobile">Mobile</button>
+                <button type="button" class="filter-btn" data-filter="Data">Data</button>
             </div>
+            <div class="projects-sort">
+                <label for="sort-select">Sort:</label>
+                <select id="sort-select" aria-label="Sort projects">
+                    <option value="featured">Featured first</option>
+                    <option value="recent">Most recent</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="projects-grid projects-cards-grid" id="projects-grid" role="list"></div>
+        <p id="no-results" class="text-center text-sec" style="display: none; padding: 2rem;">No projects match this filter.</p>
     </main>
 
     <script src="../data.js"></script>
     <script>
-        const container = document.getElementById('grid-container');
-        
-        PROJECTS.forEach(p => {
-            const card = document.createElement('div');
-            card.className = 'grid-card';
-            card.innerHTML = `
-                <div style="height: 150px; background: var(--card-bg); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
-                    Placeholder Image
-                </div>
-                <div class="grid-content">
-                    <h3 style="margin-bottom: 0.5rem; color: var(--text-primary);">${p.title}</h3>
-                    <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">${p.blurb}</p>
-                    <div style="font-size: 0.8rem; color: var(--accent-color); font-family: monospace;">${p.tech.slice(0,3).join(' ')}</div>
-                </div>
-            `;
-            card.style.cursor = 'pointer';
-            card.onclick = () => window.location.href = `project.html?id=${p.id}`;
-            container.appendChild(card);
+(function() {
+    var filter = 'all';
+    var sortBy = 'featured';
+
+    function escapeHtml(text) {
+        if (!text) return '';
+        var div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function getFilteredAndSorted() {
+        var list = PROJECTS.slice();
+        if (filter !== 'all') {
+            list = list.filter(function(p) {
+                return p.categories && p.categories.indexOf(filter) !== -1;
+            });
+        }
+        if (sortBy === 'featured') {
+            list.sort(function(a, b) {
+                if (a.featured && !b.featured) return -1;
+                if (!a.featured && b.featured) return 1;
+                return (b.sortDate || '').localeCompare(a.sortDate || '');
+            });
+        } else {
+            list.sort(function(a, b) {
+                return (b.sortDate || '').localeCompare(a.sortDate || '');
+            });
+        }
+        return list;
+    }
+
+    function renderCard(p) {
+        var thumb = (p.media && p.media[0] && p.media[0].url)
+            ? '<img src="' + escapeHtml(p.media[0].url) + '" alt="" loading="lazy">'
+            : '<span class="project-icon-emoji" aria-hidden="true">' + (p.icon || '📁') + '</span>';
+        var meta = [p.dateRange, p.org].filter(Boolean).join(' · ');
+        var impact = p.impactStatement || p.blurb || '';
+        var highlights = (p.highlights && p.highlights.length) ? p.highlights.slice(0, 3) : [];
+        var highlightsHtml = highlights.length
+            ? '<ul class="project-card-highlights">' + highlights.map(function(h) { return '<li>' + escapeHtml(h) + '</li>'; }).join('') + '</ul>'
+            : '';
+        var tags = (p.tech || []).slice(0, 5).map(function(t) {
+            return '<span class="tech-tag">' + escapeHtml(t) + '</span>';
+        }).join('');
+        return '<a class="project-card" href="project.html?id=' + encodeURIComponent(p.id) + '" role="listitem">' +
+            '<div class="project-card-thumb">' + thumb + '</div>' +
+            '<div class="project-card-body">' +
+            '<h3>' + escapeHtml(p.title) + '</h3>' +
+            '<div class="project-card-meta">' + escapeHtml(meta) + '</div>' +
+            '<p class="project-card-impact">' + escapeHtml(impact) + '</p>' +
+            highlightsHtml +
+            '<div class="project-card-tags">' + tags + '</div>' +
+            '</div></a>';
+    }
+
+    function render() {
+        var list = getFilteredAndSorted();
+        var grid = document.getElementById('projects-grid');
+        var noResults = document.getElementById('no-results');
+        grid.innerHTML = '';
+        if (list.length === 0) {
+            noResults.style.display = 'block';
+            return;
+        }
+        noResults.style.display = 'none';
+        list.forEach(function(p) {
+            grid.insertAdjacentHTML('beforeend', renderCard(p));
         });
+    }
+
+    document.querySelectorAll('.filter-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            filter = btn.getAttribute('data-filter');
+            render();
+        });
+    });
+
+    document.getElementById('sort-select').addEventListener('change', function() {
+        sortBy = this.value;
+        render();
+    });
+
+    render();
+})();
     </script>
 </body>
 </html>

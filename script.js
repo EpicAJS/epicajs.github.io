@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // initTheme(); // Commented out lightmode toggle functionality
   if(document.getElementById('typewriter')) initTypewriter();
   if(document.querySelector('.sliding-skills')) initSkillBar();
+  if(document.getElementById('featured-projects-grid')) initFeaturedProjects();
   initBinarySelector();
   initFlipCard();
   initAboutBoxes();
@@ -96,6 +97,42 @@ function initSkillBar() {
 function initFlipCard() {
   const card = document.querySelector('.flip-card');
   if(card) card.addEventListener('click', () => card.classList.toggle('flipped'));
+}
+
+/* --- Featured Projects Strip (Homepage) --- */
+function initFeaturedProjects() {
+  const grid = document.getElementById('featured-projects-grid');
+  const strip = document.getElementById('featured-projects-strip');
+  if (!grid || typeof PROJECTS === 'undefined') return;
+  const featured = PROJECTS.filter(p => p.featured === true);
+  if (featured.length === 0) {
+    if (strip) strip.style.display = 'none';
+    return;
+  }
+  featured.forEach(p => {
+    const card = document.createElement('a');
+    card.className = 'featured-project-card';
+    card.href = 'pages/project.html?id=' + encodeURIComponent(p.id);
+    card.setAttribute('aria-label', 'View project: ' + p.title);
+    const thumbContent = (p.media && p.media[0] && p.media[0].url)
+      ? '<img src="' + escapeHtml(p.media[0].url) + '" alt="" loading="lazy">'
+      : '<span class="project-icon-emoji" aria-hidden="true">' + (p.icon || '📁') + '</span>';
+    card.innerHTML =
+      '<div class="featured-project-card-thumb">' + thumbContent + '</div>' +
+      '<div class="featured-project-card-body">' +
+      '<h4>' + escapeHtml(p.title) + '</h4>' +
+      '<div class="featured-card-meta">' + escapeHtml(p.dateRange || '') + (p.org ? ' · ' + escapeHtml(p.org) : '') + '</div>' +
+      '<p>' + escapeHtml(p.impactStatement || p.blurb || '') + '</p>' +
+      '</div>';
+    grid.appendChild(card);
+  });
+}
+
+function escapeHtml(text) {
+  if (!text) return '';
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
 }
 
 /* --- Binary Project Selector --- */

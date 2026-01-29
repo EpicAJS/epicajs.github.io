@@ -19,7 +19,7 @@
                 <li><a href="#about">About</a></li>
                 <li><a href="#education">Education</a></li>
                 <li><a href="#experience">Experience</a></li>
-                <li><a href="#projects">Projects</a></li>
+                <li><a href="pages/all-projects.html">Projects</a></li>
                 <li><a href="assets/resume.pdf" class="btn" target="_blank">Resume</a></li>
                 <li id="theme-toggle" class="theme-toggle">🌙</li>
             </ul>
@@ -158,14 +158,24 @@
       </section>
 
         <section id="projects" class="projects-section container">
-            <h2 class="section-title">Project Lab</h2>
-            <p class="text-center text-sec mb-2">Toggle the bits to decode a project (0-15)</p>
+            <h2 class="section-title">Projects</h2>
 
-            <div class="text-center" style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 3rem;">
+            <div class="featured-projects-strip" id="featured-projects-strip">
+                <h3 class="featured-strip-title">Featured Projects</h3>
+                <div class="featured-projects-grid" id="featured-projects-grid" aria-label="Featured projects"></div>
+                <div class="featured-strip-cta">
+                    <a href="pages/all-projects.html" class="btn btn-fill">See all projects</a>
+                </div>
+            </div>
+
+            <h3 class="section-subtitle">Project Lab</h3>
+            <p class="text-center text-sec mb-2">Toggle the bits to decode a project (0–15)</p>
+
+            <div class="text-center binary-actions">
                 <button id="random-project-btn" class="btn btn-fill" style="padding: 0.8rem 2rem; flex: 0 0 auto; min-width: 200px;">
                     <i class="fas fa-random" style="margin-right:0.5rem;"></i> Randomize
                 </button>
-                <a href="https://devpost.com/salviaj152" class="btn" style="padding: 0.8rem 2rem; flex: 0 0 auto; min-width: 200px; text-align: center;">
+                <a href="pages/all-projects.html" class="btn" style="padding: 0.8rem 2rem; flex: 0 0 auto; min-width: 200px; text-align: center;">
                     View All Projects
                 </a>
             </div>
